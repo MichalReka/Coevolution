@@ -5,5 +5,4 @@ void CoevolutionAlgorithm::Run() {
 }
 
 void CoevolutionAlgorithm::InitializeFirstIteration() {
-
 }

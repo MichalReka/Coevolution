@@ -21,11 +21,17 @@
     <Filter Include="Logic\GeneticAlgorithm">
       <UniqueIdentifier>{c59f5470-fe9e-4b6e-b88d-cae23c71d416}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logic\Agent">
+      <UniqueIdentifier>{4913227c-5072-454f-83c5-5dbb2ea53569}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Logic\Species">
       <UniqueIdentifier>{35b37c88-f83f-440e-82e5-539080d09b69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Logic\Agent">
-      <UniqueIdentifier>{4913227c-5072-454f-83c5-5dbb2ea53569}</UniqueIdentifier>
+    <Filter Include="Domain\Environment">
+      <UniqueIdentifier>{4d5e3397-c7ae-4f76-837a-7d29d8019d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{ceacb30e-496b-4ca4-8f06-6129e8d933ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +53,9 @@
     <ClCompile Include="Agent.cpp">
       <Filter>Logic\Agent</Filter>
     </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoevolutionAlgorithm.h">
@@ -60,6 +69,12 @@
     </ClInclude>
     <ClInclude Include="Agent.h">
       <Filter>Logic\Agent</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
+      <Filter>Domain\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

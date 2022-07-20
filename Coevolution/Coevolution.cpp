@@ -74,6 +74,8 @@ void Draw(sf::RenderWindow& window, std::vector<Creature>& creatures)
 
 int main()
 {
+    srand(time(NULL));
+
     const int NO_THREADS = 12;
     sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!");
     std::vector<Creature> creatures;
