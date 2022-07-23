@@ -1,4 +1,5 @@
 #include "GeneticAlgorithm.h"
+
 std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> population, std::vector<Agent> representatives)
 {
 	eliteIndividualFitness = 0;
@@ -29,7 +30,14 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 	}
 }
 
-int GeneticAlgorithm::Evaluate(Agent agent, std::vector<Agent> representatives) {};
+float GeneticAlgorithm::Evaluate(Agent agent, std::vector<Agent> representatives) {
+	Simulation simulation;
+	std::vector<Agent> agentsToSimulate = std::vector<Agent>(representatives);
+	agentsToSimulate.push_back(agent);
+
+	simulation.RunSimulation(agentsToSimulate);
+	return simulation.fitness;
+};
 
 int GeneticAlgorithm::SelectParentIndex(std::vector<int> fitnessList, int populationSize) {
 	std::vector<int> fitnessIndexesTournament;

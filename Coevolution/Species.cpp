@@ -11,3 +11,13 @@ void Species::InitializeNewSpecies() {
 	representative = population[rand() % speciesSize];
 }
 
+void Species::CreateNewGeneration(std::vector<Agent> foreignRepresentatives) {
+	population = geneticAlgorithm.CreateNewGeneration(population, foreignRepresentatives);
+}
+
+void Species::UpdateRepresentative() {
+	representative = newRepresentative;
+	newRepresentative = geneticAlgorithm.eliteIndividual;
+}
+
+

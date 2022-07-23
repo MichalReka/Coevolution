@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Logic">
       <UniqueIdentifier>{91f379b7-2cde-43dd-95b6-f15a8d0234e4}</UniqueIdentifier>
     </Filter>
@@ -33,6 +29,9 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{ceacb30e-496b-4ca4-8f06-6129e8d933ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logic\Simulation">
+      <UniqueIdentifier>{c01fcb59-d920-4839-a9e2-cee3e122863f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Coevolution.cpp">
@@ -56,6 +55,9 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Simulation.cpp">
+      <Filter>Logic\Simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoevolutionAlgorithm.h">
@@ -75,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation.h">
+      <Filter>Logic\Simulation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

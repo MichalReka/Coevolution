@@ -147,6 +147,7 @@
     <ClCompile Include="CoevolutionAlgorithm.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
+    <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="Species.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="CoevolutionAlgorithm.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
+    <ClInclude Include="Simulation.h" />
     <ClInclude Include="Species.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>

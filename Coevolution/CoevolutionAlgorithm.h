@@ -4,13 +4,18 @@
 class CoevolutionAlgorithm
 {
 public:
-	int currentFitness = 0;
-	double fitnessChange = 0;
+	const float STAGNATE_FACTOR = 0.01;
+
+	float currentFitness = 0;
+	float fitnessChange = 0;
 	int stagnateIterations = 0;
-	int maxIterations = 100;
+
+	int maxIterations = 1000;
 	std::vector<Species> allSpecies;
 	std::vector<Species> bestSpeciesSet;
 	void Run() {};
 private:
 	void InitializeFirstIteration() {};
+	void UpdateSpeciesRepresentatives() {};
+	std::vector<Agent> GetRepresentativesForEvaluation(int indexToOmit) {};
 };
