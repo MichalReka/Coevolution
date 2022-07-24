@@ -16,8 +16,7 @@ void Species::CreateNewGeneration(std::vector<Agent> foreignRepresentatives) {
 }
 
 void Species::UpdateRepresentative() {
-	representative = newRepresentative;
-	newRepresentative = geneticAlgorithm.eliteIndividual;
+	representative = geneticAlgorithm.eliteIndividual;
 }
 
 

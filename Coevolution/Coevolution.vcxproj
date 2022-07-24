@@ -143,11 +143,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Agent.cpp" />
-    <ClCompile Include="Coevolution.cpp" />
+    <ClCompile Include="CoevolutionOld.cpp" />
     <ClCompile Include="CoevolutionAlgorithm.cpp" />
-    <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="CreatureOld.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="Simulation.cpp" />
+    <ClCompile Include="Coevolution.cpp" />
     <ClCompile Include="Species.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>

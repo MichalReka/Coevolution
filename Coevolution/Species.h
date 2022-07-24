@@ -5,12 +5,11 @@ class Species
 public:
 	std::vector<Agent> population;
 	Agent representative;
-	Agent newRepresentative;
 	int speciesSize = 100;
 
-	void InitializeNewSpecies() {};
-	void CreateNewGeneration(std::vector<Agent> foreignRepresentatives) {};
-	void UpdateRepresentative() {};
+	void InitializeNewSpecies();
+	void CreateNewGeneration(std::vector<Agent> foreignRepresentatives);
+	void UpdateRepresentative();
 private:
 	GeneticAlgorithm geneticAlgorithm;
 };

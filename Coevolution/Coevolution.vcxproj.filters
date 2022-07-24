@@ -32,14 +32,11 @@
     <Filter Include="Logic\Simulation">
       <UniqueIdentifier>{c01fcb59-d920-4839-a9e2-cee3e122863f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OldMocks">
+      <UniqueIdentifier>{eb5f7da8-c0e3-4477-970b-615397a017f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Coevolution.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Creature.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CoevolutionAlgorithm.cpp">
       <Filter>Logic\CoevolutionAlgorithm</Filter>
     </ClCompile>
@@ -57,6 +54,15 @@
     </ClCompile>
     <ClCompile Include="Simulation.cpp">
       <Filter>Logic\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="CreatureOld.cpp">
+      <Filter>OldMocks</Filter>
+    </ClCompile>
+    <ClCompile Include="CoevolutionOld.cpp">
+      <Filter>OldMocks</Filter>
+    </ClCompile>
+    <ClCompile Include="Coevolution.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

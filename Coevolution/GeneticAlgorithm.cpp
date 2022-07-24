@@ -5,11 +5,11 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 	eliteIndividualFitness = 0;
 	tournamentSize = static_cast<int>(TOURNAMENT_SIZE_FACTOR * population.size());
 	std::vector<int> fitnessList;
-	for (Agent individual : population) {
+	for (const Agent &individual : population) {
 		int fitness = Evaluate(individual, representatives);
 		fitnessList.push_back(fitness);
 		if (fitness > eliteIndividualFitness) {
-			fitness = eliteIndividualFitness;
+			eliteIndividualFitness = fitness;
 			eliteIndividual = individual;
 		}
 	}
@@ -28,6 +28,7 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 		Mutate(child);
 		newGeneration.push_back(child);
 	}
+	return newGeneration;
 }
 
 float GeneticAlgorithm::Evaluate(Agent agent, std::vector<Agent> representatives) {
@@ -36,15 +37,15 @@ float GeneticAlgorithm::Evaluate(Agent agent, std::vector<Agent> representatives
 	agentsToSimulate.push_back(agent);
 
 	simulation.RunSimulation(agentsToSimulate);
+	simulation.CalculateFitness();
 	return simulation.fitness;
 };
 
 int GeneticAlgorithm::SelectParentIndex(std::vector<int> fitnessList, int populationSize) {
-	std::vector<int> fitnessIndexesTournament;
 	int highestFitnessIndex = 0;
 	for (int i = 0; i < tournamentSize; i++) {
 		int fitnessIndexToCheck = rand() % populationSize;
-		if (fitnessList[highestFitnessIndex] < fitnessList[fitnessIndexToCheck]) {
+		if (fitnessList[highestFitnessIndex] <= fitnessList[fitnessIndexToCheck]) {
 			highestFitnessIndex = fitnessIndexToCheck;
 		}
 	}
@@ -63,7 +64,7 @@ void GeneticAlgorithm::Mutate(Agent agent) {
 	}
 };
 
-Agent Recombinate(Agent firstParent, Agent secondParent) {
+Agent GeneticAlgorithm::Recombinate(Agent firstParent, Agent secondParent) {
 	Agent child;
 	float firstParentBias = Utilities::GetRandomFloat();
 

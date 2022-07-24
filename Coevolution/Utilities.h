@@ -2,6 +2,5 @@
 
 static class Utilities {
 public:
-	static float GetRandomFloat() {};
-	static int GetHighest
+	static float GetRandomFloat();
 };

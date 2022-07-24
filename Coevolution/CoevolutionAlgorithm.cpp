@@ -2,12 +2,16 @@
 
 void CoevolutionAlgorithm::Run() {
 	this->InitializeFirstIteration();
+	this->InitializeFirstIteration(); //MOCK
 	for (int i = 0; i < maxIterations; i++) {
 		for (int i = 0; i < allSpecies.size(); i++) {
 			allSpecies[i].CreateNewGeneration(GetRepresentativesForEvaluation(i));
 		}
-
 		UpdateSpeciesRepresentatives();
+		UpdateCurrentFitness();
+		if (previousFitness != currentFitness) {
+			std::cout << currentFitness << std::endl;
+		}
 	}
 }
 
@@ -18,18 +22,27 @@ void CoevolutionAlgorithm::InitializeFirstIteration() {
 }
 
 std::vector<Agent> CoevolutionAlgorithm::GetRepresentativesForEvaluation(int indexToOmit) {
-	std::vector<Agent> foreignRepresentatives;
+	std::vector<Agent> representatives;
 
 	for (int i = 0; i < allSpecies.size(); i++) {
 		if (i != indexToOmit) {
-			foreignRepresentatives.push_back(allSpecies[i].representative);
+			representatives.push_back(allSpecies[i].representative);
 		}
 	}
-	return foreignRepresentatives;
+	return representatives;
 };
 
 void CoevolutionAlgorithm::UpdateSpeciesRepresentatives() {
-	for (Species species : allSpecies) {
+	for (Species &species : allSpecies) {
 		species.UpdateRepresentative();
 	}
+}
+
+void CoevolutionAlgorithm::UpdateCurrentFitness() {
+	std::vector<Agent> representatives = GetRepresentativesForEvaluation(-1);
+	Simulation simulation;
+	simulation.RunSimulation(representatives);
+	simulation.CalculateFitness();
+	previousFitness = currentFitness;
+	currentFitness = simulation.fitness;
 }
