@@ -35,6 +35,9 @@
     <Filter Include="OldMocks">
       <UniqueIdentifier>{eb5f7da8-c0e3-4477-970b-615397a017f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logic\Archive">
+      <UniqueIdentifier>{538df615-cc76-4445-a9ab-680ce92f1a94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoevolutionAlgorithm.cpp">
@@ -61,6 +64,9 @@
     <ClCompile Include="CoevolutionOld.cpp">
       <Filter>OldMocks</Filter>
     </ClCompile>
+    <ClCompile Include="Archive.cpp">
+      <Filter>Logic\Archive</Filter>
+    </ClCompile>
     <ClCompile Include="Coevolution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -86,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="Simulation.h">
       <Filter>Logic\Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="Archive.h">
+      <Filter>Logic\Archive</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

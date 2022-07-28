@@ -3,6 +3,8 @@ void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
 	//MOCK
 	MockSimulation(agentTemplates);
 	//MOCK
+
+
 };
 
 void Simulation::MockSimulation(std::vector<Agent> agentTemplates) {

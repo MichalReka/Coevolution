@@ -42,7 +42,7 @@ float GeneticAlgorithm::Evaluate(Agent agent, std::vector<Agent> representatives
 };
 
 int GeneticAlgorithm::SelectParentIndex(std::vector<int> fitnessList, int populationSize) {
-	int highestFitnessIndex = 0;
+	int highestFitnessIndex = rand() % populationSize;
 	for (int i = 0; i < tournamentSize; i++) {
 		int fitnessIndexToCheck = rand() % populationSize;
 		if (fitnessList[highestFitnessIndex] <= fitnessList[fitnessIndexToCheck]) {

@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Agent.cpp" />
+    <ClCompile Include="Archive.cpp" />
     <ClCompile Include="CoevolutionOld.cpp" />
     <ClCompile Include="CoevolutionAlgorithm.cpp" />
     <ClCompile Include="CreatureOld.cpp" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
+    <ClInclude Include="Archive.h" />
     <ClInclude Include="CoevolutionAlgorithm.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
