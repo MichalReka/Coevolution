@@ -4,6 +4,14 @@ void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
 	MockSimulation(agentTemplates);
 	//MOCK
 
+	for (Agent& agent : agentTemplates) {
+		agent.DetectEvent();
+	}
+
+	for (Agent& agent : agentTemplates) {
+		agent.PerformAction();
+	}
+
 
 };
 

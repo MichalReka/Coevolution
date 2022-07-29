@@ -7,3 +7,28 @@ void Agent::InitializeRandomResponses() {
 		}
 	}
 }
+
+//LackOfEnergy,
+//ArrivedToEnergyBank,
+//ArrivedToProductSource,
+//ArrivedToProductDestination,
+//TransferedEnergy,
+//TransferedProduct,
+//GotEnergy,
+//GotProduct,
+
+void Agent::DetectEvent()
+{
+	if (currentEnergy == 0) {
+		lastEvent = LackOfEnergy;
+	}
+
+	//arrived pozniej
+
+	if()
+}
+
+void Agent::PerformAction()
+{
+	
+}
