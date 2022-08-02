@@ -1,7 +1,7 @@
 #include "CoevolutionAlgorithm.h"
 
 void CoevolutionAlgorithm::Run() {
-	AddNewSpecies();
+	AddNewSpecies(true);
 	//DO ZROBIENIA - ZROBIC MOCK W KTORYM ZWIEKSZANA JEST ILOSC GATUNKOW PO WYKRYCIU STAGNACJI
 	for (int i = 0; i < maxIterations; i++) {
 		for (int j = 0; j < allSpecies.size(); j++) {
@@ -21,9 +21,9 @@ void CoevolutionAlgorithm::Run() {
 	}
 }
 
-void CoevolutionAlgorithm::AddNewSpecies() {
+void CoevolutionAlgorithm::AddNewSpecies(bool initial) {
 	Species species;
-	species.InitializeNewSpecies();
+	species.InitializeNewSpecies(initial);
 	allSpecies.push_back(species);
 }
 
@@ -58,7 +58,7 @@ bool CoevolutionAlgorithm::CheckIfStagnateIteration()
 int CoevolutionAlgorithm::SpeciesIndexToDelete(std::vector<Agent>& representatives)
 {
 	int representativesSize = representatives.size();
-	float highestFitness = 0;
+	float highestFitness = -1;
 	int indexToDelete = -1;
 	if (representativesSize == 1)
 	{
@@ -90,7 +90,7 @@ std::vector<Agent> CoevolutionAlgorithm::GetRepresentatives(int indexToOmit) {
 
 	for (int i = 0; i < allSpecies.size(); i++) {
 		if (i != indexToOmit) {
-			representatives.push_back(allSpecies[i].representative);
+			representatives.push_back(allSpecies[i].population[allSpecies[i].representativeIndex]);
 		}
 	}
 	return representatives;

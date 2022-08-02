@@ -147,6 +147,7 @@
     <ClCompile Include="CoevolutionOld.cpp" />
     <ClCompile Include="CoevolutionAlgorithm.cpp" />
     <ClCompile Include="CreatureOld.cpp" />
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="Coevolution.cpp" />

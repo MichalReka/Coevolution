@@ -20,7 +20,7 @@ public:
 	Archive archive;
 	void Run();
 private:
-	void AddNewSpecies();
+	void AddNewSpecies(bool initial = false);
 	void HandleStagnation(std::vector<Agent>& representatives);
 	bool CheckIfStagnateIteration();
 	int SpeciesIndexToDelete(std::vector<Agent>& representatives);

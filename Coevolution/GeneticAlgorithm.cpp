@@ -2,15 +2,17 @@
 
 std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> population, std::vector<Agent> representatives)
 {
+	Agent eliteIndividual;
 	eliteIndividualFitness = 0;
 	tournamentSize = static_cast<int>(TOURNAMENT_SIZE_FACTOR * population.size());
 	std::vector<int> fitnessList;
-	for (const Agent &individual : population) {
-		int fitness = Evaluate(individual, representatives);
+	for (int i = 0; i < population.size(); i++) {
+		int fitness = Evaluate(population[i], representatives);
 		fitnessList.push_back(fitness);
 		if (fitness > eliteIndividualFitness) {
 			eliteIndividualFitness = fitness;
-			eliteIndividual = individual;
+			eliteIndividual = population[i];
+			eliteIndividualIndex = i;
 		}
 	}
 
@@ -31,7 +33,7 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 	return newGeneration;
 }
 
-float GeneticAlgorithm::Evaluate(Agent agent, std::vector<Agent> representatives) {
+float GeneticAlgorithm::Evaluate(Agent& agent, std::vector<Agent> representatives) {
 	Simulation simulation;
 	std::vector<Agent> agentsToSimulate = std::vector<Agent>(representatives);
 	agentsToSimulate.push_back(agent);
@@ -53,7 +55,7 @@ int GeneticAlgorithm::SelectParentIndex(std::vector<int> fitnessList, int popula
 	return highestFitnessIndex;
 }
 
-void GeneticAlgorithm::Mutate(Agent agent) {
+void GeneticAlgorithm::Mutate(Agent& agent) {
 	for (int events = 0; events < EVENTS_MAX; events++)
 	{
 		for (int movements = 0; movements < MOVEMENT_STATE_MAX; movements++) {
@@ -64,7 +66,7 @@ void GeneticAlgorithm::Mutate(Agent agent) {
 	}
 };
 
-Agent GeneticAlgorithm::Recombinate(Agent firstParent, Agent secondParent) {
+Agent GeneticAlgorithm::Recombinate(Agent& firstParent, Agent& secondParent) {
 	Agent child;
 	float firstParentBias = Utilities::GetRandomFloat();
 

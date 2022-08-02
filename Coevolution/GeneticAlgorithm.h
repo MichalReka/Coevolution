@@ -7,7 +7,7 @@
 class GeneticAlgorithm
 {
 public:
-	Agent eliteIndividual;
+	int eliteIndividualIndex;
 	int eliteIndividualFitness;
 	float mutationRate = 0.05f;
 	float const TOURNAMENT_SIZE_FACTOR = 0.01f;
@@ -19,15 +19,15 @@ public:
 	// user-defined copy assignment (copy-and-swap idiom)
 	GeneticAlgorithm& operator=(GeneticAlgorithm other)
 	{
-		std::swap(eliteIndividual, other.eliteIndividual);
+		std::swap(eliteIndividualIndex, other.eliteIndividualIndex);
 		std::swap(eliteIndividualFitness, other.eliteIndividualFitness);
 		return *this;
 	}
 private:
 	int tournamentSize = 0;
-	float Evaluate(Agent agent, std::vector<Agent> representatives);
-	void Mutate(Agent agent);
-	Agent Recombinate(Agent firstParent, Agent secondParent);
+	float Evaluate(Agent& agent, std::vector<Agent> representatives);
+	void Mutate(Agent& agent);
+	Agent Recombinate(Agent& firstParent, Agent& secondParent);
 	int SelectParentIndex(std::vector<int> fitnessList, int populationSize);
 };
 

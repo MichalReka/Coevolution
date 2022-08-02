@@ -1,6 +1,6 @@
 #include "Species.h"
 
-void Species::InitializeNewSpecies() {
+void Species::InitializeNewSpecies(bool initial) {
 	population.clear();
 	for (int i = 0; i < speciesSize; i++)
 	{
@@ -8,7 +8,13 @@ void Species::InitializeNewSpecies() {
 		individual.InitializeRandomResponses();
 		population.push_back(individual);
 	}
-	representative = population[rand() % speciesSize];
+	representativeIndex = rand() % speciesSize;
+	if (initial) {
+		population[representativeIndex].responses[ArrivedToEnergyBank][Waiting] = GoToProductSource;
+		population[representativeIndex].responses[ArrivedToEnergyBank][GoingToProductSource] = GoToProductSource;
+		population[representativeIndex].responses[ArrivedToProductSource][GoingToProductSource] = GoToProductDestination;
+		population[representativeIndex].responses[ArrivedToProductSource][GoingToProductDestination] = GoToProductDestination;
+	}
 }
 
 void Species::CreateNewGeneration(std::vector<Agent>& foreignRepresentatives) {
@@ -16,7 +22,7 @@ void Species::CreateNewGeneration(std::vector<Agent>& foreignRepresentatives) {
 }
 
 void Species::UpdateRepresentative() {
-	representative = geneticAlgorithm.eliteIndividual;
+	representativeIndex = geneticAlgorithm.eliteIndividualIndex;
 }
 
 

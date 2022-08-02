@@ -4,10 +4,10 @@ class Species
 {
 public:
 	std::vector<Agent> population;
-	Agent representative;
+	int representativeIndex;
 	int speciesSize = 100;
 
-	void InitializeNewSpecies();
+	void InitializeNewSpecies(bool initial);
 	void CreateNewGeneration(std::vector<Agent>& foreignRepresentatives);
 	void UpdateRepresentative();
 
@@ -17,7 +17,7 @@ public:
     Species& operator=(Species other)
     {
         std::swap(population, other.population);
-        std::swap(representative, other.representative);
+        std::swap(representativeIndex, other.representativeIndex);
         std::swap(geneticAlgorithm, other.geneticAlgorithm);
         return *this;
     }

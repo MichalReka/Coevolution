@@ -1,18 +1,25 @@
 #include "Simulation.h"
+
 void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
-	//MOCK
-	MockSimulation(agentTemplates);
-	//MOCK
+	////MOCK
+	//MockSimulation(agentTemplates);
+	////MOCK
+	for (int i = 0; i < SIMULATION_MAX_ITERATIONS; i++)
+	{
+		for (Agent& agent : agentTemplates) {
+			agent.DetectEvent();
+		}
 
-	for (Agent& agent : agentTemplates) {
-		agent.DetectEvent();
+		for (Agent& agent : agentTemplates) {
+			agent.PerformAction();
+		}
 	}
 
 	for (Agent& agent : agentTemplates) {
-		agent.PerformAction();
+		productsGatheredPerAgent = productsGatheredPerAgent + agent.totalProductGathered;
 	}
 
-
+	productsGatheredPerAgent = productsGatheredPerAgent / agentTemplates.size();
 };
 
 void Simulation::MockSimulation(std::vector<Agent> agentTemplates) {
