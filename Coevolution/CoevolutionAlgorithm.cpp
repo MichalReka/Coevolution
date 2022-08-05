@@ -1,7 +1,7 @@
 #include "CoevolutionAlgorithm.h"
 
 void CoevolutionAlgorithm::Run() {
-	AddNewSpecies(true);
+	AddNewSpecies(false);
 	//DO ZROBIENIA - ZROBIC MOCK W KTORYM ZWIEKSZANA JEST ILOSC GATUNKOW PO WYKRYCIU STAGNACJI
 	for (int i = 0; i < maxIterations; i++) {
 		for (int j = 0; j < allSpecies.size(); j++) {
@@ -11,8 +11,8 @@ void CoevolutionAlgorithm::Run() {
 		UpdateSpeciesRepresentatives();
 
 		std::vector<Agent> representatives = GetRepresentatives(-1);
-		std::cout << currentFitness << " " << stagnateIterations << std::endl;
 		UpdateCurrentFitness(representatives);
+		std::cout << currentFitness << " " << stagnateIterations << std::endl;
 		if (previousFitness != currentFitness) {
 			archive.UpdateBestTeam(representatives, currentFitness);
 			archive.UpdateMaxFitnessPerSpeciesNumber(currentFitness, representatives.size());
@@ -39,12 +39,12 @@ void CoevolutionAlgorithm::HandleStagnation(std::vector<Agent>& representatives)
 	if (stagnateIterations == STAGNATE_THRESHOLD_PER_SPECIES * allSpecies.size()) {
 		int speciesIndexToDelete = SpeciesIndexToDelete(representatives);
 		if (speciesIndexToDelete == -1) {
-			AddNewSpecies();
-			//std::cout << "DODANIE NOWEGO GATUNKU! LICZBA GATUNKOW: "<< allSpecies.size() << std::endl;
+			AddNewSpecies(false);
+			std::cout << "DODANIE NOWEGO GATUNKU! LICZBA GATUNKOW: "<< allSpecies.size() << std::endl;
 		}
 		else {
 			allSpecies.erase(allSpecies.begin() + speciesIndexToDelete);
-			//std::cout << "USUNIECIE GATUNKU! LICZBA GATUNKOW: "<< allSpecies.size() << std::endl;
+			std::cout << "USUNIECIE GATUNKU! LICZBA GATUNKOW: "<< allSpecies.size() << std::endl;
 		}
 		stagnateIterations = 0;
 	}
@@ -77,7 +77,7 @@ int CoevolutionAlgorithm::SpeciesIndexToDelete(std::vector<Agent>& representativ
 		linear_erase(copyOfRepresentatives, i);
 		simulation.RunSimulation(copyOfRepresentatives);
 		simulation.CalculateFitness();
-		if (archive.maxFitnessPerSpeciesNumber[allSpecies.size()-1] < simulation.fitness && highestFitness < simulation.fitness) {
+		if (archive.maxFitnessPerSpeciesNumber[allSpecies.size()-1] <= simulation.fitness && highestFitness <= simulation.fitness) {
 			highestFitness = simulation.fitness;
 			indexToDelete = i;
 		}

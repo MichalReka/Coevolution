@@ -5,7 +5,12 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 	Agent eliteIndividual;
 	eliteIndividualFitness = 0;
 	tournamentSize = static_cast<int>(TOURNAMENT_SIZE_FACTOR * population.size());
-	std::vector<int> fitnessList;
+	std::vector<int> fitnessList(population.size());
+	std::vector<int> indexes(population.size());
+	for (int i = 0; i < population.size(); i++) {
+		indexes.push_back(i);
+	}
+
 	for (int i = 0; i < population.size(); i++) {
 		int fitness = Evaluate(population[i], representatives);
 		fitnessList.push_back(fitness);
@@ -64,6 +69,10 @@ void GeneticAlgorithm::Mutate(Agent& agent) {
 			}
 		}
 	}
+
+	if (mutationRate > Utilities::GetRandomFloat()) {
+		agent.agentTemplateSize = rand() % Environment::MAX_AGENTS_PER_TEMPLATE;
+	}
 };
 
 Agent GeneticAlgorithm::Recombinate(Agent& firstParent, Agent& secondParent) {
@@ -81,6 +90,7 @@ Agent GeneticAlgorithm::Recombinate(Agent& firstParent, Agent& secondParent) {
 			}
 		}
 	}
+	child.agentTemplateSize = firstParent.agentTemplateSize;
 
 	return child;
 };

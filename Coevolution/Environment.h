@@ -11,6 +11,7 @@ public:
 	static float MAX_PRODUCT_PER_AGENT;
 	static float MAX_PRODUCT_ENERGY_MULTIPLIER;
 	static float MAX_ENERGY_PER_AGENT;
+	static int MAX_AGENTS_PER_TEMPLATE;
 };
 
 enum Events

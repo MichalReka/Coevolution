@@ -8,7 +8,7 @@ class CoevolutionAlgorithm
 	//TODO: ARCHIWUM, MECHANIZM WYKRYWANIA STAGNACJI I DODAWANIA/USUWANIA GATUNKÓW!
 public:
 	const double STAGNATE_FACTOR = 0.01;
-	const int STAGNATE_THRESHOLD_PER_SPECIES = 20;
+	const int STAGNATE_THRESHOLD_PER_SPECIES = 50;
 
 	float currentFitness = 0;
 	float previousFitness = 0;

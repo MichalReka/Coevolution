@@ -9,12 +9,6 @@ void Species::InitializeNewSpecies(bool initial) {
 		population.push_back(individual);
 	}
 	representativeIndex = rand() % speciesSize;
-	if (initial) {
-		population[representativeIndex].responses[ArrivedToEnergyBank][Waiting] = GoToProductSource;
-		population[representativeIndex].responses[ArrivedToEnergyBank][GoingToProductSource] = GoToProductSource;
-		population[representativeIndex].responses[ArrivedToProductSource][GoingToProductSource] = GoToProductDestination;
-		population[representativeIndex].responses[ArrivedToProductSource][GoingToProductDestination] = GoToProductDestination;
-	}
 }
 
 void Species::CreateNewGeneration(std::vector<Agent>& foreignRepresentatives) {

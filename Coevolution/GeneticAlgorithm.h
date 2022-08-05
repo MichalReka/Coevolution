@@ -3,15 +3,16 @@
 #include "Utilities.h"
 #include "Simulation.h"
 #include <vector>
+#include <ppl.h>
 
 class GeneticAlgorithm
 {
 public:
 	int eliteIndividualIndex;
 	int eliteIndividualFitness;
-	float mutationRate = 0.05f;
-	float const TOURNAMENT_SIZE_FACTOR = 0.01f;
-	int const INDIVIDUALS_PER_SPECIES = 100;
+	float mutationRate = 0.1f;
+	float const TOURNAMENT_SIZE_FACTOR = 0.1f;
+	int const INDIVIDUALS_PER_SPECIES = 1000;
 	std::vector<Agent> CreateNewGeneration(std::vector<Agent> population, std::vector<Agent> representatives);
 
 	GeneticAlgorithm() = default;

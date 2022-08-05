@@ -4,23 +4,41 @@ void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
 	////MOCK
 	//MockSimulation(agentTemplates);
 	////MOCK
-	for (int i = 0; i < SIMULATION_MAX_ITERATIONS; i++)
-	{
-		for (Agent& agent : agentTemplates) {
-			agent.DetectEvent();
-		}
 
-		for (Agent& agent : agentTemplates) {
-			agent.PerformAction();
+	std::vector<Agent> realAgents;
+
+	for (Agent& agentTemplate : agentTemplates) {
+		for (int i = 0; i < agentTemplate.agentTemplateSize; i++) {
+			Agent realAgent = agentTemplate;
+			realAgents.push_back(realAgent);
 		}
 	}
 
-	for (Agent& agent : agentTemplates) {
+	for (int i = 0; i < SIMULATION_MAX_ITERATIONS; i++)
+	{
+		for (Agent& agent : realAgents) {
+			agent.DetectEvent(runtimeData.productRequesters, runtimeData.energyRequesters);
+		}
+
+		for (Agent& agent : realAgents) {
+			agent.PerformAction(runtimeData.productRequesters, runtimeData.energyRequesters);
+		}
+	}
+
+	for (Agent& agent : realAgents) {
 		productsGatheredPerAgent = productsGatheredPerAgent + agent.totalProductGathered;
 	}
 
-	productsGatheredPerAgent = productsGatheredPerAgent / agentTemplates.size();
-};
+	if (productsGatheredPerAgent > 0) {
+		productsGatheredPerAgent = productsGatheredPerAgent / realAgents.size();
+
+	}
+}
+std::thread Simulation::CreateSimulationThread(std::vector<Agent>& agentTemplates)
+{
+	return std::thread();
+}
+;
 
 void Simulation::MockSimulation(std::vector<Agent> agentTemplates) {
 	energySpentPerAgent = 1;

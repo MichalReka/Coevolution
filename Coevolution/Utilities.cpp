@@ -11,7 +11,11 @@ bool Utilities::IsNear(sf::Vector2f& vector1, sf::Vector2f& vector2)
 {
     float xDif = vector1.x - vector2.x;
     float yDif = vector1.y - vector2.y;
-    return sqrt(pow(xDif, 2) + pow(yDif, 2)) <= 1;
+    return Utilities::GetVectorLength(xDif, yDif) <= 1;
+}
+
+double Utilities::GetVectorLength(double x, double y) {
+    return sqrt(pow(x, 2) + pow(y, 2));
 }
 
 void Utilities::NormalizeVector(sf::Vector2f& v)
