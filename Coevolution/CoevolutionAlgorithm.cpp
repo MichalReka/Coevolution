@@ -1,8 +1,7 @@
 #include "CoevolutionAlgorithm.h"
 
 void CoevolutionAlgorithm::Run() {
-	AddNewSpecies(false);
-	//DO ZROBIENIA - ZROBIC MOCK W KTORYM ZWIEKSZANA JEST ILOSC GATUNKOW PO WYKRYCIU STAGNACJI
+	AddNewSpecies();
 	for (int i = 0; i < maxIterations; i++) {
 		for (int j = 0; j < allSpecies.size(); j++) {
 			std::vector<Agent> representatives = GetRepresentatives(j);
@@ -10,8 +9,7 @@ void CoevolutionAlgorithm::Run() {
 		}
 		UpdateSpeciesRepresentatives();
 
-		std::vector<Agent> representatives = GetRepresentatives(-1);
-		UpdateCurrentFitness(representatives);
+		std::vector<Agent> representatives = GetBestRepresentatives();
 		std::cout << currentFitness << " " << stagnateIterations << std::endl;
 		if (previousFitness != currentFitness) {
 			archive.UpdateBestTeam(representatives, currentFitness);
@@ -35,7 +33,6 @@ void CoevolutionAlgorithm::HandleStagnation(std::vector<Agent>& representatives)
 	else {
 		stagnateIterations = 0;
 	}
-
 	if (stagnateIterations == STAGNATE_THRESHOLD_PER_SPECIES * allSpecies.size()) {
 		int speciesIndexToDelete = SpeciesIndexToDelete(representatives);
 		if (speciesIndexToDelete == -1) {
@@ -102,10 +99,23 @@ void CoevolutionAlgorithm::UpdateSpeciesRepresentatives() {
 	}
 }
 
-void CoevolutionAlgorithm::UpdateCurrentFitness(std::vector<Agent>& representatives) {
-	Simulation simulation;
-	simulation.RunSimulation(representatives);
-	simulation.CalculateFitness();
+std::vector<Agent> CoevolutionAlgorithm::GetBestRepresentatives() {
 	previousFitness = currentFitness;
-	currentFitness = simulation.fitness;
+	float bestFitness = -1;
+	std::vector<Agent> representatives;
+	for (int i = 0; i < allSpecies.size(); i++)
+	{
+		std::vector<Agent> candidates = GetRepresentatives(i);
+		candidates.push_back(allSpecies[i].population[allSpecies[i].representativeIndex]);
+		Simulation simulation;
+		simulation.RunSimulation(candidates);
+		simulation.CalculateFitness();
+		if (bestFitness < simulation.fitness) {
+			representatives = candidates;
+			bestFitness = simulation.fitness;
+		}
+	}
+	
+	currentFitness = bestFitness;
+	return representatives;
 }

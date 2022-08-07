@@ -24,7 +24,7 @@ private:
 	void HandleStagnation(std::vector<Agent>& representatives);
 	bool CheckIfStagnateIteration();
 	int SpeciesIndexToDelete(std::vector<Agent>& representatives);
-	void UpdateCurrentFitness(std::vector<Agent>& representatives);
+	std::vector<Agent> GetBestRepresentatives();
 	void UpdateSpeciesRepresentatives();
 	std::vector<Agent> GetRepresentatives(int indexToOmit);
 };

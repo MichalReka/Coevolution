@@ -1,15 +1,28 @@
 #include "GeneticAlgorithm.h"
+#include <future>
 
 std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> population, std::vector<Agent> representatives)
 {
 	Agent eliteIndividual;
 	eliteIndividualFitness = 0;
 	tournamentSize = static_cast<int>(TOURNAMENT_SIZE_FACTOR * population.size());
-	std::vector<int> fitnessList(population.size());
-	std::vector<int> indexes(population.size());
-	for (int i = 0; i < population.size(); i++) {
-		indexes.push_back(i);
-	}
+	std::vector<int> fitnessList;
+
+	//std::vector<std::future<float>> futures;
+	//for (int i = 0; i < population.size(); i++) {
+	//	Agent *agent = &population[i];
+	//	futures.push_back(std::async([this, agent, representatives] {return this->Evaluate(*agent, representatives); }));
+	//}
+
+	//for (int i = 0; i < population.size(); i++) {
+	//	float fitness = futures[i].get();
+	//	fitnessList.push_back(fitness);
+	//	if (fitness > eliteIndividualFitness) {
+	//		eliteIndividualFitness = fitness;
+	//		eliteIndividual = population[i];
+	//		eliteIndividualIndex = i;
+	//	}
+	//}
 
 	for (int i = 0; i < population.size(); i++) {
 		int fitness = Evaluate(population[i], representatives);
@@ -40,12 +53,11 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 
 float GeneticAlgorithm::Evaluate(Agent& agent, std::vector<Agent> representatives) {
 	Simulation simulation;
-	std::vector<Agent> agentsToSimulate = std::vector<Agent>(representatives);
-	agentsToSimulate.push_back(agent);
-
-	simulation.RunSimulation(agentsToSimulate);
+	representatives.push_back(agent);
+	simulation.RunSimulation(representatives);
 	simulation.CalculateFitness();
-	return simulation.fitness;
+	float fitness = simulation.fitness;
+	return fitness;
 };
 
 int GeneticAlgorithm::SelectParentIndex(std::vector<int> fitnessList, int populationSize) {
@@ -64,14 +76,16 @@ void GeneticAlgorithm::Mutate(Agent& agent) {
 	for (int events = 0; events < EVENTS_MAX; events++)
 	{
 		for (int movements = 0; movements < MOVEMENT_STATE_MAX; movements++) {
-			if (mutationRate > Utilities::GetRandomFloat()) {
-				agent.responses[events][movements] = rand() % ACTIONS_MAX;
+			for (int actions = 0; actions < ACTIONS_MAX; actions++) {
+				if (mutationRate > Utilities::GetRandomFloat()) {
+					agent.responses[events][movements][actions] = rand() % ACTIONS_MAX;
+				}
 			}
 		}
 	}
 
 	if (mutationRate > Utilities::GetRandomFloat()) {
-		agent.agentTemplateSize = rand() % Environment::MAX_AGENTS_PER_TEMPLATE;
+		agent.agentTemplateSize = rand() % Environment::MAX_AGENTS_PER_TEMPLATE + 1;
 	}
 };
 
@@ -82,11 +96,13 @@ Agent GeneticAlgorithm::Recombinate(Agent& firstParent, Agent& secondParent) {
 	for (int events = 0; events < EVENTS_MAX; events++)
 	{
 		for (int movements = 0; movements < MOVEMENT_STATE_MAX; movements++) {
-			if (firstParentBias > Utilities::GetRandomFloat()) {
-				child.responses[events][movements] = firstParent.responses[events][movements];
-			}
-			else {
-				child.responses[events][movements] = secondParent.responses[events][movements];
+			for (int actions = 0; actions < ACTIONS_MAX; actions++) {
+				if (firstParentBias > Utilities::GetRandomFloat()) {
+					child.responses[events][movements][actions] = firstParent.responses[events][movements][actions];
+				}
+				else {
+					child.responses[events][movements][actions] = secondParent.responses[events][movements][actions];
+				}
 			}
 		}
 	}

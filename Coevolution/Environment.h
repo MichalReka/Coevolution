@@ -9,7 +9,9 @@ public:
 	static sf::Vector2f PRODUCT_DROP_POSITION;
 	static sf::Vector2f PRODUCT_TAKE_POSITION;
 	static float MAX_PRODUCT_PER_AGENT;
-	static float MAX_PRODUCT_ENERGY_MULTIPLIER;
+	static float MAX_PRODUCT_ENERGY_SLOWUP;
+	static float MAX_PRODUCT_SLOWUP;
+	static float ZERO_ENERGY_SLOWUP;
 	static float MAX_ENERGY_PER_AGENT;
 	static int MAX_AGENTS_PER_TEMPLATE;
 };
@@ -30,7 +32,9 @@ enum Events
 
 enum MovementState {
 	Waiting,
-	GoingToProductSource,
+	GoingToProductSourceToTakeMax,
+	GoingToProductSourceToTakeHalf,
+	GoingToProductSourceToTakeQuater,
 	GoingToEnergyBank,
 	GoingToProductDestination,
 	GoingToNearestIndividual,
@@ -41,17 +45,19 @@ enum MovementState {
 
 enum Actions
 {
-	GoToProductSource,
+	GoToProductSourceToTakeMax,
+	GoToProductSourceToTakeHalf,
+	GoToProductSourceToTakeQuater,
 	GoToEnergyBank,
 	GoToProductDestination,
 	GoToNearestEnergyRequester,
 	GoToNearestProductRequester,
 	RequestEnergy,
 	RequestProduct,
+	Continue,
+	Wait,
 	//TakeAllPossibleProduct,
 	//TakeEnoughProductToRefillEnergy,
 	//TakeEnoughProductToDropIt,
-	Continue,
-	Wait,
-	ACTIONS_MAX
+	ACTIONS_MAX = 11
 };

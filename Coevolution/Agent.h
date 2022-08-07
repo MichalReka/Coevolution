@@ -2,13 +2,14 @@
 #include "Environment.h";
 #include <stdlib.h>
 #include "Utilities.h"
+#include <iostream>
 
 class Agent
 {
 public:
 	sf::Vector2f position = sf::Vector2f(1, 1);
 
-	int responses[EVENTS_MAX][MOVEMENT_STATE_MAX];
+	int responses[EVENTS_MAX][MOVEMENT_STATE_MAX][ACTIONS_MAX];
 	int agentTemplateSize = 1;
 
 	float currentEnergy = Environment::MAX_ENERGY_PER_AGENT;
@@ -24,7 +25,6 @@ public:
 		std::map<Agent*, Agent>& energyRequesters);
 	void PerformAction(std::map<Agent*, Agent>& productRequesters,
 		std::map<Agent*, Agent>& energyRequesters);
-
 private:
 	Actions currentAction = Wait;
 	Events lastEvent = ArrivedToEnergyBank;

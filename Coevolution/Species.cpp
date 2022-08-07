@@ -1,7 +1,6 @@
 #include "Species.h"
 
 void Species::InitializeNewSpecies(bool initial) {
-	population.clear();
 	for (int i = 0; i < speciesSize; i++)
 	{
 		Agent individual;
