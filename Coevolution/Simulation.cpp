@@ -1,6 +1,6 @@
 #include "Simulation.h"
 
-void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
+void Simulation::RunSimulation(std::vector<Agent>& agentTemplates) {
 	////MOCK
 	//MockSimulation(agentTemplates);
 	////MOCK
@@ -20,6 +20,7 @@ void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
 			agent.DetectEvent(runtimeData.productRequesters, runtimeData.energyRequesters);
 		}
 
+
 		for (Agent& agent : realAgents) {
 			agent.PerformAction(runtimeData.productRequesters, runtimeData.energyRequesters);
 		}
@@ -27,11 +28,14 @@ void Simulation::RunSimulation(std::vector<Agent> agentTemplates) {
 
 	for (Agent& agent : realAgents) {
 		productsGatheredPerAgent = productsGatheredPerAgent + agent.totalProductGathered;
+		productTransferedPerAgent = productTransferedPerAgent + agent.productTransfered;
+		energyTransferedPerAgent = energyTransferedPerAgent + agent.energyTransfered;
 	}
 
-	if (productsGatheredPerAgent > 0) {
-		productsGatheredPerAgent = productsGatheredPerAgent / realAgents.size();
-	}
+	productsGatheredPerAgent = productsGatheredPerAgent / realAgents.size();
+	productTransferedPerAgent = productTransferedPerAgent / realAgents.size();
+	energyTransferedPerAgent = energyTransferedPerAgent / realAgents.size();
+	
 }
 std::thread Simulation::CreateSimulationThread(std::vector<Agent>& agentTemplates)
 {

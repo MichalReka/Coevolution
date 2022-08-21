@@ -14,25 +14,25 @@ void Agent::InitializeRandomResponses() {
 
 void Agent::MoveTo(sf::Vector2f destination)
 {
+	if (destination == position) {
+		return;
+	}
 	sf::Vector2f offset = destination - position;
 	Utilities::NormalizeVector(offset);
 	if (currentEnergy <= 0) {
 		offset = sf::Vector2f(offset.x / Environment::ZERO_ENERGY_SLOWUP, offset.y / Environment::ZERO_ENERGY_SLOWUP);
 		if (currentProduct > 0) {
-			offset = sf::Vector2f(offset.x / 2, offset.y / 2);
+			offset = sf::Vector2f(offset.x / Environment::MAX_PRODUCT_SLOWUP, offset.y / Environment::MAX_PRODUCT_SLOWUP);
 		}
 	}
 	else {
 		float energyMultiplier = Utilities::ConvertRange(0, Environment::MAX_PRODUCT_PER_AGENT, 1, Environment::MAX_PRODUCT_ENERGY_SLOWUP, currentProduct);
-		if (energyMultiplier > 1) {
-			auto x = 10;
-		}
 		currentEnergy = currentEnergy - 1 * energyMultiplier;
 	}
 	position = position + offset;
 }
 
-void Agent::HandleGoingToRequesters(std::map<Agent*, Agent>& requesters)
+void Agent::HandleGoingToRequesters(std::set<Agent*>& requesters)
 {
 	if (requesters.size() == 0 || (requesters.size() == 1 && requesters.count(this) == 1)) {
 		movementState = Waiting;
@@ -44,27 +44,42 @@ void Agent::HandleGoingToRequesters(std::map<Agent*, Agent>& requesters)
 
 	for (auto& requester : requesters)
 	{
-		if (requester.first != this) {
-			double distance = Utilities::GetVectorLength(requester.second.position.x, requester.second.position.y);
-			if (distance < minDistance) {
+		if (requester != this) {
+			sf::Vector2f v(requester->position.x - this->position.x, requester->position.y - this->position.y);
+			double distance = Utilities::GetVectorLength(v.x, v.y);
+			if (distance < minDistance && distance > 0) {
 				minDistance = distance;
-				direction = requester.second.position;
+				direction = requester->position;
 			}
 		}
+	}
+
+	if (direction.x == 0) {
+		movementState = Waiting;
+		return;
 	}
 
 	MoveTo(direction);
 }
 
-bool Agent::TransferToNearbyProductRequester(std::map<Agent*, Agent>& productRequesters)
+bool Agent::TransferToNearbyProductRequester(std::set<Agent*>& productRequesters)
 {
 	Agent* candidate = NULL;
 	for (auto& requester : productRequesters)
 	{
-		if (this != requester.first && Utilities::IsNear(position, requester.second.position)) {
-			requester.first->currentProduct = requester.first->currentProduct + currentProduct;
+		if (this != requester && Utilities::IsNear(position, requester->position)) {
+			float transfered = currentProduct;
+
+			requester->currentProduct = requester->currentProduct + currentProduct;
 			currentProduct = 0;
-			candidate = requester.first;
+			if (requester->currentProduct > Environment::MAX_PRODUCT_PER_AGENT) {
+				float overflow = requester->currentProduct - Environment::MAX_PRODUCT_PER_AGENT;
+				currentProduct = overflow;
+				requester->currentProduct = requester->currentProduct - overflow;
+				transfered = transfered - overflow;
+			}
+			productTransfered = productTransfered + transfered;
+			candidate = requester;
 			break;
 		}
 	}
@@ -78,20 +93,25 @@ bool Agent::TransferToNearbyProductRequester(std::map<Agent*, Agent>& productReq
 	return true;
 }
 
-bool Agent::TransferToNearbyEnergyRequester(std::map<Agent*, Agent>& energyRequesters)
+bool Agent::TransferToNearbyEnergyRequester(std::set<Agent*>& energyRequesters)
 {
 	Agent* candidate = NULL;
 	for (auto& requester : energyRequesters)
 	{
-		if (this != requester.first && Utilities::IsNear(position, requester.second.position)) {
-			requester.first->currentEnergy = requester.first->currentEnergy + currentEnergy;
+		if (this != requester && Utilities::IsNear(position, requester->position)) {
+			float transfered = currentEnergy;
+
+			requester->currentEnergy = requester->currentEnergy + currentEnergy;
 			currentEnergy = 0;
-			if (requester.first->currentEnergy > Environment::MAX_ENERGY_PER_AGENT) {
-				float overflow = requester.first->currentEnergy - Environment::MAX_ENERGY_PER_AGENT;
+			if (requester->currentEnergy > Environment::MAX_ENERGY_PER_AGENT) {
+				float overflow = requester->currentEnergy - Environment::MAX_ENERGY_PER_AGENT;
 				currentEnergy = overflow;
-				requester.first->currentEnergy = requester.first->currentEnergy - overflow;
+				requester->currentEnergy = requester->currentEnergy - overflow;
+				transfered = transfered - overflow;
+
 			}
-			candidate = requester.first;
+			energyTransfered = energyTransfered + transfered;
+			candidate = requester;
 			break;
 		}
 	}
@@ -122,16 +142,11 @@ void Agent::MoveAccordingToState()
 		break;
 	case GoingToProductDestination:
 		MoveTo(Environment::PRODUCT_DROP_POSITION);
-	case GoingToNearestEnergyRequester:
-		break;
-	case GoingToNearestProductRequester:
-		MoveTo(Environment::PRODUCT_DROP_POSITION);
-		break;
 	}
 }
 
-void Agent::DetectEvent(std::map<Agent*, Agent>& productRequesters,
-	std::map<Agent*, Agent>& energyRequesters)
+void Agent::DetectEvent(std::set<Agent*>& productRequesters,
+	std::set<Agent*>& energyRequesters)
 {
 	if (currentEnergy <= 0 && lastEvent != LackOfEnergy) {
 		lastEvent = LackOfEnergy;
@@ -166,14 +181,6 @@ void Agent::DetectEvent(std::map<Agent*, Agent>& productRequesters,
 			currentProduct = Environment::MAX_PRODUCT_PER_AGENT / 4;
 		}
 	}
-	else if (requestingEnergy && energyRequesters.count(this) == 0) {
-		lastEvent = GotEnergy;
-			requestingEnergy = false;
-	}
-	else if (requestingProduct && productRequesters.count(this) == 0) {
-		lastEvent = GotProduct;
-			requestingProduct = false;
-	}
 	else if (movementState == GoingToNearestEnergyRequester && TransferToNearbyEnergyRequester(energyRequesters)) {
 		lastEvent = TransferedEnergy;
 	}
@@ -181,10 +188,13 @@ void Agent::DetectEvent(std::map<Agent*, Agent>& productRequesters,
 		lastEvent = TransferedProduct;
 	}
 }
-void Agent::PerformAction(std::map<Agent*, Agent>& productRequesters,
-	std::map<Agent*, Agent>& energyRequesters)
+void Agent::PerformAction(std::set<Agent*>& productRequesters,
+	std::set<Agent*>& energyRequesters)
 {
 	Actions lastAction = this->currentAction;
+	if (lastAction < 0) {
+		return;
+	}
 	this->currentAction = static_cast<Actions>(responses[lastEvent][movementState][lastAction]);
 
 	if (currentAction == Continue) {
@@ -216,12 +226,10 @@ void Agent::PerformAction(std::map<Agent*, Agent>& productRequesters,
 		HandleGoingToRequesters(productRequesters);
 		break;
 	case RequestEnergy:
-		requestingEnergy = true;
-		energyRequesters[this];
+		energyRequesters.insert(this);
 		break;
 	case RequestProduct:
-		requestingProduct = true;
-		productRequesters[this];
+		productRequesters.insert(this);
 		break;
 	case Wait:
 		movementState = Waiting;

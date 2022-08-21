@@ -1,6 +1,6 @@
 #include "Species.h"
 
-void Species::InitializeNewSpecies(bool initial) {
+void Species::InitializeNewSpecies() {
 	for (int i = 0; i < speciesSize; i++)
 	{
 		Agent individual;

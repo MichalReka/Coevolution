@@ -7,7 +7,7 @@ public:
 	int representativeIndex;
 	int speciesSize = 100;
 
-	void InitializeNewSpecies(bool initial);
+	void InitializeNewSpecies();
 	void CreateNewGeneration(std::vector<Agent>& foreignRepresentatives);
 	void UpdateRepresentative();
 

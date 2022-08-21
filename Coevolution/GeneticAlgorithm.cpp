@@ -1,6 +1,5 @@
 #include "GeneticAlgorithm.h"
 #include <future>
-
 std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> population, std::vector<Agent> representatives)
 {
 	Agent eliteIndividual;
@@ -54,6 +53,8 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 float GeneticAlgorithm::Evaluate(Agent& agent, std::vector<Agent> representatives) {
 	Simulation simulation;
 	representatives.push_back(agent);
+	Actions g = static_cast<Actions>(representatives[0].responses[0][0][representatives[0].currentAction]);
+
 	simulation.RunSimulation(representatives);
 	simulation.CalculateFitness();
 	float fitness = simulation.fitness;
