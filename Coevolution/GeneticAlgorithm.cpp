@@ -1,6 +1,6 @@
 #include "GeneticAlgorithm.h"
 #include <future>
-std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> population, std::vector<Agent> representatives)
+std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent>& population, std::vector<Agent>& representatives)
 {
 	Agent eliteIndividual;
 	eliteIndividualFitness = 0;
@@ -53,7 +53,6 @@ std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent> popu
 float GeneticAlgorithm::Evaluate(Agent& agent, std::vector<Agent> representatives) {
 	Simulation simulation;
 	representatives.push_back(agent);
-	Actions g = static_cast<Actions>(representatives[0].responses[0][0][representatives[0].currentAction]);
 
 	simulation.RunSimulation(representatives);
 	simulation.CalculateFitness();
@@ -77,10 +76,13 @@ void GeneticAlgorithm::Mutate(Agent& agent) {
 	for (int events = 0; events < EVENTS_MAX; events++)
 	{
 		for (int movements = 0; movements < MOVEMENT_STATE_MAX; movements++) {
-			for (int actions = 0; actions < ACTIONS_MAX; actions++) {
-				if (mutationRate > Utilities::GetRandomFloat()) {
-					agent.responses[events][movements][actions] = rand() % ACTIONS_MAX;
-				}
+				for (int energyState = 0; energyState < AGENT_ENERGY_STATE_MAX; energyState++) {
+					for (int productState = 0; productState < AGENT_PRODUCT_STATE_MAX; productState++) {
+						if (mutationRate > Utilities::GetRandomFloat()) {
+							agent.responses[events][movements][energyState][productState] = rand() % ACTIONS_MAX;
+						}
+					}
+				
 			}
 		}
 	}
@@ -97,13 +99,16 @@ Agent GeneticAlgorithm::Recombinate(Agent& firstParent, Agent& secondParent) {
 	for (int events = 0; events < EVENTS_MAX; events++)
 	{
 		for (int movements = 0; movements < MOVEMENT_STATE_MAX; movements++) {
-			for (int actions = 0; actions < ACTIONS_MAX; actions++) {
-				if (firstParentBias > Utilities::GetRandomFloat()) {
-					child.responses[events][movements][actions] = firstParent.responses[events][movements][actions];
-				}
-				else {
-					child.responses[events][movements][actions] = secondParent.responses[events][movements][actions];
-				}
+				for (int energyState = 0; energyState < AGENT_ENERGY_STATE_MAX; energyState++) {
+					for (int productState = 0; productState < AGENT_PRODUCT_STATE_MAX; productState++) {
+						if (firstParentBias > Utilities::GetRandomFloat()) {
+							child.responses[events][movements][energyState][productState] = firstParent.responses[events][movements][energyState][productState];
+						}
+						else {
+							child.responses[events][movements][energyState][productState] = secondParent.responses[events][movements][energyState][productState];
+						}
+					}
+				
 			}
 		}
 	}

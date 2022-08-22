@@ -7,11 +7,11 @@ float Utilities::GetRandomFloat()
     return dis(e);
 }
 
-bool Utilities::IsNear(sf::Vector2f& vector1, sf::Vector2f& vector2)
+bool Utilities::IsNear(sf::Vector2f& vector1, sf::Vector2f& vector2, float offset)
 {
     float xDif = vector1.x - vector2.x;
     float yDif = vector1.y - vector2.y;
-    return Utilities::GetVectorLength(xDif, yDif) <= 1;
+    return Utilities::GetVectorLength(xDif, yDif) <= offset;
 }
 
 double Utilities::GetVectorLength(double x, double y) {

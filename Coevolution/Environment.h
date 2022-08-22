@@ -22,7 +22,6 @@ enum Events
 	ArrivedToEnergyBank,
 	ArrivedToProductSource,
 	ArrivedToProductDestination,
-	CollidedWithOther,
 	TransferedEnergy,
 	TransferedProduct,
 	GotEnergy,
@@ -33,8 +32,8 @@ enum Events
 enum MovementState {
 	Waiting,
 	GoingToProductSourceToTakeMax,
-	GoingToProductSourceToTakeHalf,
-	GoingToProductSourceToTakeQuater,
+	//GoingToProductSourceToTakeHalf,
+	//GoingToProductSourceToTakeQuater,
 	GoingToEnergyBank,
 	GoingToProductDestination,
 	GoingToNearestIndividual,
@@ -46,8 +45,8 @@ enum MovementState {
 enum Actions
 {
 	GoToProductSourceToTakeMax,
-	GoToProductSourceToTakeHalf,
-	GoToProductSourceToTakeQuater,
+	//GoToProductSourceToTakeHalf,
+	//GoToProductSourceToTakeQuater,
 	GoToEnergyBank,
 	GoToProductDestination,
 	GoToNearestEnergyRequester,
@@ -60,4 +59,16 @@ enum Actions
 	//TakeEnoughProductToRefillEnergy,
 	//TakeEnoughProductToDropIt,
 	ACTIONS_MAX = 11
+};
+
+enum AgentEnergyState {
+	NoEnergy,
+	HaveEnergy,
+	AGENT_ENERGY_STATE_MAX
+};
+
+enum AgentProductState {
+	NoProduct,
+	HaveProduct,
+	AGENT_PRODUCT_STATE_MAX
 };

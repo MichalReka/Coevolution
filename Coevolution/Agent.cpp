@@ -4,9 +4,11 @@ void Agent::InitializeRandomResponses() {
 	for (int events = 0; events < EVENTS_MAX; events++)
 	{
 		for (int movements = 0; movements < MOVEMENT_STATE_MAX; movements++) {
-			for (int actions = 0; actions < ACTIONS_MAX; actions++) {
-				responses[events][movements][actions] = rand() % ACTIONS_MAX;
-			}
+				for (int energyState = 0; energyState < AGENT_ENERGY_STATE_MAX; energyState++) {
+					for (int productState = 0; productState < AGENT_PRODUCT_STATE_MAX; productState++) {
+						responses[events][movements][energyState][productState] = rand() % ACTIONS_MAX;
+					}
+				}
 		}
 	}
 	agentTemplateSize = rand() % Environment::MAX_AGENTS_PER_TEMPLATE + 1;
@@ -27,7 +29,11 @@ void Agent::MoveTo(sf::Vector2f destination)
 	}
 	else {
 		float energyMultiplier = Utilities::ConvertRange(0, Environment::MAX_PRODUCT_PER_AGENT, 1, Environment::MAX_PRODUCT_ENERGY_SLOWUP, currentProduct);
+
 		currentEnergy = currentEnergy - 1 * energyMultiplier;
+		if (currentEnergy < 0) {
+			currentEnergy = 0;
+		}
 	}
 	position = position + offset;
 }
@@ -67,7 +73,7 @@ bool Agent::TransferToNearbyProductRequester(std::set<Agent*>& productRequesters
 	Agent* candidate = NULL;
 	for (auto& requester : productRequesters)
 	{
-		if (this != requester && Utilities::IsNear(position, requester->position)) {
+		if (this != requester && Utilities::IsNear(position, requester->position, 2)) {
 			float transfered = currentProduct;
 
 			requester->currentProduct = requester->currentProduct + currentProduct;
@@ -98,7 +104,7 @@ bool Agent::TransferToNearbyEnergyRequester(std::set<Agent*>& energyRequesters)
 	Agent* candidate = NULL;
 	for (auto& requester : energyRequesters)
 	{
-		if (this != requester && Utilities::IsNear(position, requester->position)) {
+		if (this != requester && Utilities::IsNear(position, requester->position, 2)) {
 			float transfered = currentEnergy;
 
 			requester->currentEnergy = requester->currentEnergy + currentEnergy;
@@ -131,12 +137,12 @@ void Agent::MoveAccordingToState()
 	case GoingToProductSourceToTakeMax:
 		MoveTo(Environment::PRODUCT_TAKE_POSITION);
 		break;
-	case GoingToProductSourceToTakeHalf:
-		MoveTo(Environment::PRODUCT_TAKE_POSITION);
-		break;
-	case GoingToProductSourceToTakeQuater:
-		MoveTo(Environment::PRODUCT_TAKE_POSITION);
-		break;
+	//case GoingToProductSourceToTakeHalf:
+	//	MoveTo(Environment::PRODUCT_TAKE_POSITION);
+	//	break;
+	//case GoingToProductSourceToTakeQuater:
+	//	MoveTo(Environment::PRODUCT_TAKE_POSITION);
+	//	break;
 	case GoingToEnergyBank:
 		MoveTo(Environment::ENERGY_REFILL_POSITION);
 		break;
@@ -166,20 +172,22 @@ void Agent::DetectEvent(std::set<Agent*>& productRequesters,
 		totalProductGathered = totalProductGathered + currentProduct;
 		currentProduct = 0;
 	}
-	else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION) 
-		&& (movementState == GoingToProductSourceToTakeHalf 
-			|| movementState == GoingToProductSourceToTakeMax 
-			|| movementState == GoingToProductSourceToTakeQuater)) {
+	//else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION) 
+	//	&& (movementState == GoingToProductSourceToTakeHalf 
+	//		|| movementState == GoingToProductSourceToTakeMax 
+	//		|| movementState == GoingToProductSourceToTakeQuater)) {
+	else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION)
+		&& movementState == GoingToProductSourceToTakeMax) {
 		lastEvent = ArrivedToProductSource;
 		if (movementState == GoingToProductSourceToTakeMax) {
 			currentProduct = Environment::MAX_PRODUCT_PER_AGENT;
 		}
-		else if (movementState == GoingToProductSourceToTakeHalf) {
-			currentProduct = Environment::MAX_PRODUCT_PER_AGENT / 2;
-		}
-		else if (movementState == GoingToProductSourceToTakeQuater) {
-			currentProduct = Environment::MAX_PRODUCT_PER_AGENT / 4;
-		}
+		//else if (movementState == GoingToProductSourceToTakeHalf) {
+		//	currentProduct = Environment::MAX_PRODUCT_PER_AGENT / 2;
+		//}
+		//else if (movementState == GoingToProductSourceToTakeQuater) {
+		//	currentProduct = Environment::MAX_PRODUCT_PER_AGENT / 4;
+		//}
 	}
 	else if (movementState == GoingToNearestEnergyRequester && TransferToNearbyEnergyRequester(energyRequesters)) {
 		lastEvent = TransferedEnergy;
@@ -195,19 +203,22 @@ void Agent::PerformAction(std::set<Agent*>& productRequesters,
 	if (lastAction < 0) {
 		return;
 	}
-	this->currentAction = static_cast<Actions>(responses[lastEvent][movementState][lastAction]);
+
+	int energyState = currentEnergy == 0 ? NoEnergy : HaveEnergy;
+	int productState = currentProduct == 0 ? NoProduct : HaveProduct;
+	this->currentAction = static_cast<Actions>(responses[lastEvent][movementState][energyState][productState]);
 
 	if (currentAction == Continue) {
 		return;
 	}
 
 	switch (currentAction) { //TYLKO USTAWIENIE STANU, POTEM
-	case GoToProductSourceToTakeQuater:
-		movementState = GoingToProductSourceToTakeQuater;
-		break;
-	case GoToProductSourceToTakeHalf:
-		movementState = GoingToProductSourceToTakeHalf;
-		break;
+	//case GoToProductSourceToTakeQuater:
+	//	movementState = GoingToProductSourceToTakeQuater;
+	//	break;
+	//case GoToProductSourceToTakeHalf:
+	//	movementState = GoingToProductSourceToTakeHalf;
+	//	break;
 	case GoToProductSourceToTakeMax:
 		movementState = GoingToProductSourceToTakeMax;
 		break;

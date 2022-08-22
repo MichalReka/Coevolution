@@ -10,7 +10,7 @@ class Agent
 public:
 	sf::Vector2f position = sf::Vector2f(1, 1);
 
-	int responses[EVENTS_MAX][MOVEMENT_STATE_MAX][ACTIONS_MAX];
+	int responses[EVENTS_MAX][MOVEMENT_STATE_MAX][AGENT_ENERGY_STATE_MAX][AGENT_PRODUCT_STATE_MAX];
 	int agentTemplateSize = 1;
 
 	float currentEnergy = Environment::MAX_ENERGY_PER_AGENT;
