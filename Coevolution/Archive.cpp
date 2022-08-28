@@ -22,11 +22,12 @@ void Archive::UpdateBestTeam(std::vector<Agent> teamCandidate, float fitnessCand
 	}
 }
 
-RunData RunData::ExtractRunDataFromSimulation(Simulation& simulation)
+RunData RunData::ExtractRunData(Simulation& simulation, int iteration)
 {
 	RunData runData;
 	runData.fitness = simulation.productsGatheredPerAgent;
 	runData.productTransferedPerAgent = simulation.productTransferedPerAgent;
 	runData.energyTransferedPerAgent = simulation.energyTransferedPerAgent;
+	runData.coevIteration = iteration;
 	return runData;
 }

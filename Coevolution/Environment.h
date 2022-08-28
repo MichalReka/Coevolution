@@ -55,9 +55,6 @@ enum Actions
 	RequestProduct,
 	Continue,
 	Wait,
-	//TakeAllPossibleProduct,
-	//TakeEnoughProductToRefillEnergy,
-	//TakeEnoughProductToDropIt,
 	ACTIONS_MAX = 11
 };
 

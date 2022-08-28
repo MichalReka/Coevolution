@@ -7,8 +7,9 @@ struct RunData {
 	float fitness;
 	float productTransferedPerAgent = 0;
 	float energyTransferedPerAgent = 0;
+	int coevIteration = 0;
 
-	static RunData ExtractRunDataFromSimulation(Simulation& simulation);
+	static RunData ExtractRunData(Simulation& simulation, int iteration);
 };
 
 class Archive

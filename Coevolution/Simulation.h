@@ -15,7 +15,7 @@ class Simulation
 {
 public:
 	const int AGENTS_PER_TEMPLATE = 1;
-	const int SIMULATION_MAX_ITERATIONS = 300;
+	const int SIMULATION_MAX_ITERATIONS = 350;
 
 	float fitness = 0;
 	float productsGatheredPerAgent = 0;

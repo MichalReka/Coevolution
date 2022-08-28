@@ -5,7 +5,7 @@
 
 #include <fstream>
 // Declare the traits. Specify which data members need to be serialized.
-JSONCONS_ALL_MEMBER_NAME_TRAITS(RunData, (fitness, "fitness"),
+JSONCONS_ALL_MEMBER_NAME_TRAITS(RunData, (fitness, "fitness"), (coevIteration, "coevIteration"),
 	(productTransferedPerAgent, "productTransferedPerAgent"),
 	(energyTransferedPerAgent, "energyTransferedPerAgent"));
 
@@ -63,7 +63,7 @@ int main() {
 	std::cout << "coev" << std::endl;
 	std::vector<Archive> archives;
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 10; i++) {
 		CoevolutionAlgorithm coev;
 		coev.Run();
 		archives.push_back(coev.archive);
