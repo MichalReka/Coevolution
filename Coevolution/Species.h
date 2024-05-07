@@ -5,7 +5,7 @@ class Species
 public:
 	std::vector<Agent> population;
 	int representativeIndex;
-	int speciesSize = 100;
+	int speciesSize = 70;
 
 	void InitializeNewSpecies();
 	void CreateNewGeneration(std::vector<Agent>& foreignRepresentatives);

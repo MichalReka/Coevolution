@@ -35,7 +35,7 @@ void Agent::MoveTo(sf::Vector2f destination)
 			currentEnergy = 0;
 		}
 	}
-	position = position + offset;
+	position = position + offset*Environment::AGENT_SPEED;
 }
 
 void Agent::HandleGoingToRequesters(std::set<Agent*>& requesters)
@@ -73,7 +73,7 @@ bool Agent::TransferToNearbyProductRequester(std::set<Agent*>& productRequesters
 	Agent* candidate = NULL;
 	for (auto& requester : productRequesters)
 	{
-		if (this != requester && Utilities::IsNear(position, requester->position, 2)) {
+		if (this != requester && Utilities::IsNear(position, requester->position, 64)) {
 			float transfered = currentProduct;
 
 			requester->currentProduct = requester->currentProduct + currentProduct;
@@ -104,7 +104,7 @@ bool Agent::TransferToNearbyEnergyRequester(std::set<Agent*>& energyRequesters)
 	Agent* candidate = NULL;
 	for (auto& requester : energyRequesters)
 	{
-		if (this != requester && Utilities::IsNear(position, requester->position, 2)) {
+		if (this != requester && Utilities::IsNear(position, requester->position, 64)) {
 			float transfered = currentEnergy;
 
 			requester->currentEnergy = requester->currentEnergy + currentEnergy;
@@ -137,7 +137,10 @@ void Agent::MoveAccordingToState()
 	case GoingToProductSourceToTakeMax:
 		MoveTo(Environment::PRODUCT_TAKE_POSITION);
 		break;
-	//case GoingToProductSourceToTakeHalf:
+	case GoingToProductSourceToTakeNothing:
+		MoveTo(Environment::PRODUCT_TAKE_POSITION);
+		break;
+	// //case GoingToProductSourceToTakeHalf:
 	//	MoveTo(Environment::PRODUCT_TAKE_POSITION);
 	//	break;
 	//case GoingToProductSourceToTakeQuater:
@@ -172,12 +175,11 @@ void Agent::DetectEvent(std::set<Agent*>& productRequesters,
 		totalProductGathered = totalProductGathered + currentProduct;
 		currentProduct = 0;
 	}
-	//else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION) 
-	//	&& (movementState == GoingToProductSourceToTakeHalf 
-	//		|| movementState == GoingToProductSourceToTakeMax 
-	//		|| movementState == GoingToProductSourceToTakeQuater)) {
-	else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION)
-		&& movementState == GoingToProductSourceToTakeMax) {
+	else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION) 
+		&& (movementState == GoingToProductSourceToTakeNothing
+			|| movementState == GoingToProductSourceToTakeMax)) {
+	//else if (Utilities::IsNear(position, Environment::PRODUCT_TAKE_POSITION)
+	//	&& movementState == GoingToProductSourceToTakeMax) {
 		lastEvent = ArrivedToProductSource;
 		if (movementState == GoingToProductSourceToTakeMax) {
 			currentProduct = Environment::MAX_PRODUCT_PER_AGENT;
@@ -192,9 +194,9 @@ void Agent::DetectEvent(std::set<Agent*>& productRequesters,
 	else if (movementState == GoingToNearestEnergyRequester && TransferToNearbyEnergyRequester(energyRequesters)) {
 		lastEvent = TransferedEnergy;
 	}
-	else if (movementState == GoingToNearestProductRequester && TransferToNearbyProductRequester(productRequesters)) {
-		lastEvent = TransferedProduct;
-	}
+	//else if (movementState == GoingToNearestProductRequester && TransferToNearbyProductRequester(productRequesters)) {
+	//	lastEvent = TransferedProduct;
+	//}
 }
 void Agent::PerformAction(std::set<Agent*>& productRequesters,
 	std::set<Agent*>& energyRequesters)
@@ -208,17 +210,17 @@ void Agent::PerformAction(std::set<Agent*>& productRequesters,
 	int productState = currentProduct == 0 ? NoProduct : HaveProduct;
 	this->currentAction = static_cast<Actions>(responses[lastEvent][movementState][energyState][productState]);
 
-	if (currentAction == Continue) {
-		return;
-	}
+	//if (currentAction == Continue) {
+	//	return;
+	//}
 
 	switch (currentAction) { //TYLKO USTAWIENIE STANU, POTEM
 	//case GoToProductSourceToTakeQuater:
 	//	movementState = GoingToProductSourceToTakeQuater;
 	//	break;
-	//case GoToProductSourceToTakeHalf:
-	//	movementState = GoingToProductSourceToTakeHalf;
-	//	break;
+	case GoToProductSourceToTakeNothing:
+		movementState = GoingToProductSourceToTakeNothing;
+		break;
 	case GoToProductSourceToTakeMax:
 		movementState = GoingToProductSourceToTakeMax;
 		break;
@@ -232,16 +234,16 @@ void Agent::PerformAction(std::set<Agent*>& productRequesters,
 		movementState = GoingToNearestEnergyRequester;
 		HandleGoingToRequesters(energyRequesters);
 		break;
-	case GoToNearestProductRequester:
-		movementState = GoingToNearestProductRequester;
-		HandleGoingToRequesters(productRequesters);
-		break;
+	//case GoToNearestProductRequester:
+	//	movementState = GoingToNearestProductRequester;
+	//	HandleGoingToRequesters(productRequesters);
+	//	break;
 	case RequestEnergy:
 		energyRequesters.insert(this);
 		break;
-	case RequestProduct:
-		productRequesters.insert(this);
-		break;
+	//case RequestProduct:
+	//	productRequesters.insert(this);
+	//	break;
 	case Wait:
 		movementState = Waiting;
 		break;

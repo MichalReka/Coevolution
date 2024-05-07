@@ -1,27 +1,12 @@
 #include "GeneticAlgorithm.h"
-#include <future>
+#include <math.h>
+
 std::vector<Agent> GeneticAlgorithm::CreateNewGeneration(std::vector<Agent>& population, std::vector<Agent>& representatives)
 {
 	Agent eliteIndividual;
 	eliteIndividualFitness = 0;
 	tournamentSize = static_cast<int>(TOURNAMENT_SIZE_FACTOR * population.size());
 	std::vector<int> fitnessList;
-
-	//std::vector<std::future<float>> futures;
-	//for (int i = 0; i < population.size(); i++) {
-	//	Agent *agent = &population[i];
-	//	futures.push_back(std::async([this, agent, representatives] {return this->Evaluate(*agent, representatives); }));
-	//}
-
-	//for (int i = 0; i < population.size(); i++) {
-	//	float fitness = futures[i].get();
-	//	fitnessList.push_back(fitness);
-	//	if (fitness > eliteIndividualFitness) {
-	//		eliteIndividualFitness = fitness;
-	//		eliteIndividual = population[i];
-	//		eliteIndividualIndex = i;
-	//	}
-	//}
 
 	for (int i = 0; i < population.size(); i++) {
 		int fitness = Evaluate(population[i], representatives);
@@ -56,7 +41,7 @@ float GeneticAlgorithm::Evaluate(Agent& agent, std::vector<Agent> representative
 
 	simulation.RunSimulation(representatives);
 	simulation.CalculateFitness();
-	float fitness = simulation.fitness;
+	float fitness = simulation.fitness + simulation.fitness * tanh(simulation.energyTransferedPerAgent / 500);
 	return fitness;
 };
 

@@ -11,7 +11,7 @@ public:
 	int eliteIndividualIndex;
 	int eliteIndividualFitness;
 	float mutationRate = 0.1f;
-	float const TOURNAMENT_SIZE_FACTOR = 0.1f;
+	float const TOURNAMENT_SIZE_FACTOR = 0.2f;
 	std::vector<Agent> CreateNewGeneration(std::vector<Agent>& population, std::vector<Agent>& representatives);
 
 	GeneticAlgorithm() = default;

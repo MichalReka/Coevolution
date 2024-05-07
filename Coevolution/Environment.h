@@ -13,6 +13,7 @@ public:
 	static float MAX_PRODUCT_SLOWUP;
 	static float ZERO_ENERGY_SLOWUP;
 	static float MAX_ENERGY_PER_AGENT;
+	static float AGENT_SPEED;
 	static int MAX_AGENTS_PER_TEMPLATE;
 };
 
@@ -23,7 +24,7 @@ enum Events
 	ArrivedToProductSource,
 	ArrivedToProductDestination,
 	TransferedEnergy,
-	TransferedProduct,
+	//TransferedProduct,
 	GotEnergy,
 	GotProduct,
 	EVENTS_MAX
@@ -32,12 +33,12 @@ enum Events
 enum MovementState {
 	Waiting,
 	GoingToProductSourceToTakeMax,
-	//GoingToProductSourceToTakeHalf,
+	GoingToProductSourceToTakeNothing,
 	//GoingToProductSourceToTakeQuater,
 	GoingToEnergyBank,
 	GoingToProductDestination,
 	GoingToNearestIndividual,
-	GoingToNearestProductRequester,
+	//GoingToNearestProductRequester,
 	GoingToNearestEnergyRequester,
 	MOVEMENT_STATE_MAX
 };
@@ -45,15 +46,15 @@ enum MovementState {
 enum Actions
 {
 	GoToProductSourceToTakeMax,
-	//GoToProductSourceToTakeHalf,
+	GoToProductSourceToTakeNothing,
 	//GoToProductSourceToTakeQuater,
 	GoToEnergyBank,
 	GoToProductDestination,
 	GoToNearestEnergyRequester,
-	GoToNearestProductRequester,
+	//GoToNearestProductRequester,
 	RequestEnergy,
-	RequestProduct,
-	Continue,
+	//RequestProduct,
+	//Continue,
 	Wait,
 	ACTIONS_MAX = 11
 };

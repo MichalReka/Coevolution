@@ -15,7 +15,7 @@ class Simulation
 {
 public:
 	const int AGENTS_PER_TEMPLATE = 1;
-	const int SIMULATION_MAX_ITERATIONS = 350;
+	const int SIMULATION_MAX_ITERATIONS = 400;
 
 	float fitness = 0;
 	float productsGatheredPerAgent = 0;
@@ -24,9 +24,10 @@ public:
 	float energyTransferedPerAgent = 0;
 	SimulationRuntimeData runtimeData;
 
-	void RunSimulation(std::vector<Agent>& agentTemplates);
+	void RunSimulation(std::vector<Agent>& agentTemplates, bool graphic = false);
 	std::thread CreateSimulationThread(std::vector<Agent>& agentTemplates);
 	void MockSimulation(std::vector<Agent> agentTemplates);
 	void CalculateFitness();
+	void DrawSimulationIter(sf::RenderWindow& window, std::vector<Agent>& agents);
 };
 

@@ -1,16 +1,23 @@
 #include "Archive.h"
+Archive::Archive() {
+
+	maxFitnessRunDataPerSpecies.push_back(RunData());
+	maxFitnessRunDataPerSpecies.push_back(RunData());
+	maxFitnessRunDataPerSpecies.push_back(RunData());
+}
 
 void Archive::UpdateMaxFitnessRunData(RunData& runData, int speciesNumber)
 {
-	if (maxFitnessRunDataPerSpecies.size() < speciesNumber) {
-		maxFitnessRunDataPerSpecies.push_back(runData);
-		std::vector<RunData> v;
-		v.push_back(runData);
-		maxFitnessesRunDataPerSpeciesPerIteration.push_back(v);
-	}
-	else if (runData.fitness > maxFitnessRunDataPerSpecies[speciesNumber - 1].fitness) {
+	if (runData.fitness >= maxFitnessRunDataPerSpecies[speciesNumber - 1].fitness) {
 		maxFitnessRunDataPerSpecies[speciesNumber - 1] = runData;
-		maxFitnessesRunDataPerSpeciesPerIteration[speciesNumber - 1].push_back(runData);
+		if (maxFitnessesRunDataPerSpeciesPerIteration.size() < speciesNumber) {
+			std::vector<RunData> v;
+			v.push_back(runData);
+			maxFitnessesRunDataPerSpeciesPerIteration.push_back(v);
+		}
+		else{
+			maxFitnessesRunDataPerSpeciesPerIteration[speciesNumber - 1].push_back(runData);
+		}
 	}
 }
 

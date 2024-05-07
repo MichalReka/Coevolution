@@ -2,18 +2,18 @@
 
 void CoevolutionAlgorithm::Run() {
 	AddNewSpecies();
-	for (int i = 0; i < maxIterations; i++) {
+	for (currentIteration; currentIteration < maxIterations; currentIteration++) {
 		for (int j = 0; j < allSpecies.size(); j++) {
 			std::vector<Agent> representatives = GetRepresentatives(j);
 			allSpecies[j].CreateNewGeneration(representatives);
 		}
 		UpdateSpeciesRepresentatives();
 
-		std::vector<Agent> representatives = GetBestRepresentatives(i);
+		std::vector<Agent> representatives = GetBestRepresentatives();
 		std::cout << "Ocena: " 
 			<< currentFitness 
 			<<", Iter.: "
-			<< i
+			<< currentIteration
 			<< ", Iter. stagnacji: " 
 			<< stagnateIterations 
 			<< ", Transfery energii: " 
@@ -26,8 +26,12 @@ void CoevolutionAlgorithm::Run() {
 			archive.UpdateBestTeam(representatives, currentFitness);
 			archive.UpdateMaxFitnessRunData(currentBestSimulationRunData, representatives.size());
 		}
+
 		HandleStagnation();
 	}
+	RunGraphicSimulation();
+
+
 }
 
 void CoevolutionAlgorithm::AddNewSpecies() {
@@ -48,7 +52,7 @@ void CoevolutionAlgorithm::HandleStagnation()
 		if (allSpecies.size() == 3) {
 			auto x = 1;
 		}
-		std::vector representatives = GetRepresentatives(-1);
+		std::vector<Agent> representatives = GetRepresentatives(-1);
 		DeleteUnproductiveSpecies(representatives);
 		representatives = GetRepresentatives(-1);
 		ShiftSimilarSpecies(representatives);
@@ -123,6 +127,9 @@ void CoevolutionAlgorithm::ShiftSimilarSpecies(std::vector<Agent>& representativ
 		simulation.CalculateFitness();
 
 		if (highestFitness < simulation.fitness) {
+			RunData runData = RunData::ExtractRunData(simulation, currentIteration);
+
+			archive.UpdateMaxFitnessRunData(runData, copyOfRepresentatives.size());
 			highestFitness = simulation.fitness;
 			indexToPreserve = i;
 		}
@@ -155,7 +162,15 @@ std::vector<Agent> CoevolutionAlgorithm::GetRepresentatives(int indexToOmit) {
 		}
 	}
 	return representatives;
-};
+}
+
+void CoevolutionAlgorithm::RunGraphicSimulation()
+{
+	std::vector<Agent> representatives = GetRepresentatives(-1);
+
+	Simulation simulation;
+	simulation.RunSimulation(representatives, true);
+}
 
 void CoevolutionAlgorithm::UpdateSpeciesRepresentatives() {
 	for (Species& species : allSpecies) {
@@ -163,7 +178,7 @@ void CoevolutionAlgorithm::UpdateSpeciesRepresentatives() {
 	}
 }
 
-std::vector<Agent> CoevolutionAlgorithm::GetBestRepresentatives(int iteration) {
+std::vector<Agent> CoevolutionAlgorithm::GetBestRepresentatives() {
 	previousFitness = currentFitness;
 	std::vector<Agent> representatives = GetRepresentatives(-1);
 
@@ -172,6 +187,6 @@ std::vector<Agent> CoevolutionAlgorithm::GetBestRepresentatives(int iteration) {
 	simulation.CalculateFitness();
 
 	currentFitness = simulation.fitness;
-	currentBestSimulationRunData = RunData::ExtractRunData(simulation, iteration);
+	currentBestSimulationRunData = RunData::ExtractRunData(simulation, currentIteration);
 	return representatives;
 }
